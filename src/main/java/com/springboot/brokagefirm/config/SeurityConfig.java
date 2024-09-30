@@ -27,8 +27,6 @@ public class SeurityConfig {
                     authorize.requestMatchers(antMatcher("/h2-console/**")).permitAll()
                             .requestMatchers(antMatcher(HttpMethod.GET, "/api/brokagefirm/orders/**")).permitAll()
                             .requestMatchers(antMatcher(HttpMethod.POST, "/api/brokagefirm/orders")).permitAll()
-                            .requestMatchers(antMatcher("/api/login", "/api/register")).permitAll()
-
                             .anyRequest().authenticated();
                 })
                 .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // This so embedded frames in h2-console are working
