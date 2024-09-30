@@ -23,20 +23,20 @@ public class OrderController {
     @Autowired
     private AssetService assetService;
 
-    @PostMapping
+    @PostMapping("/orders")
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
         Order createdOrder = orderService.createOrder(order);
         return ResponseEntity.ok(createdOrder);
     }
 
-    @GetMapping
+    @GetMapping("/orders")
     public List<Order> listOrders(@RequestParam String customerId,
                                   @RequestParam LocalDateTime startDate,
                                   @RequestParam LocalDateTime endDate) {
         return orderService.listOrders(customerId, startDate, endDate);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/orders/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
