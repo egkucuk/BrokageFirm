@@ -3,7 +3,9 @@ package com.springboot.brokagefirm.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -25,6 +27,8 @@ public class SeurityConfig {
                     authorize.requestMatchers(antMatcher("/h2-console/**")).permitAll()
                             .requestMatchers(antMatcher(HttpMethod.GET, "/api/brokagefirm/orders/**")).permitAll()
                             .requestMatchers(antMatcher(HttpMethod.POST, "/api/brokagefirm/orders")).permitAll()
+                            .requestMatchers(antMatcher("/api/login", "/api/register")).permitAll()
+
                             .anyRequest().authenticated();
                 })
                 .headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // This so embedded frames in h2-console are working
@@ -32,6 +36,16 @@ public class SeurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return httpSecurity.build();
+    }
+
+    @Bean
+    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder
+                .inMemoryAuthentication()
+                .withUser("admin").password(passwordEncoder().encode("Admin1234.")).roles("ADMIN");
+        return authenticationManagerBuilder.build();
     }
 
     @Bean
