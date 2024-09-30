@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@RequestMapping("api/brokagefirm")
 public class OrderController {
 
     @Autowired
